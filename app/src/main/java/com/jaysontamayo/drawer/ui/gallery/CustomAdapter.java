@@ -17,6 +17,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
     private String[] localDataSet;
     private int[] localDataSetImages;
+    private String[] localDataSetDesc;
 
     /**
      * Provide a reference to the type of views that you are using
@@ -53,10 +54,11 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
      * @param dataSet String[] containing the data to populate views to be used
      * by RecyclerView
      */
-    public CustomAdapter(String[] dataSet, int[] dataSetImages) {
+    public CustomAdapter(String[] dataSet, int[] dataSetImages, String[] dataSetDesc) {
 
         localDataSet = dataSet;
         localDataSetImages = dataSetImages;
+        localDataSetDesc = dataSetDesc;
     }
 
     // Create new views (invoked by the layout manager)
@@ -78,6 +80,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         Log.i("", "" + localDataSet[position]);
         viewHolder.getTitle().setText(localDataSet[position]);
         viewHolder.getHeaderImage().setImageResource(localDataSetImages[position]);
+        viewHolder.getDescription().setText(localDataSetDesc[position]);
     }
 
     // Return the size of your dataset (invoked by the layout manager)
