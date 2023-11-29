@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jaysontamayo.drawer.R;
@@ -18,6 +19,11 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     private String[] localDataSet;
     private int[] localDataSetImages;
     private String[] localDataSetDesc;
+    private final OnItemClickListener localListener;
+
+    public interface OnItemClickListener {
+        void onItemClick(String item);
+    }
 
     /**
      * Provide a reference to the type of views that you are using
@@ -27,6 +33,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         private final TextView title;
         private final TextView description;
         private final ImageView header_image;
+        private final CardView cardView;
 
         public ViewHolder(View view) {
             super(view);
@@ -35,6 +42,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             title = view.findViewById(R.id.title);
             description = view.findViewById(R.id.description);
             header_image = view.findViewById(R.id.header_image);
+            cardView = view.findViewById(R.id.cardView);
         }
 
         public TextView getTitle() {
@@ -46,6 +54,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         public ImageView getHeaderImage() {
             return header_image;
         }
+        public CardView getCardView() {
+            return cardView;
+        }
     }
 
     /**
@@ -54,11 +65,12 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
      * @param dataSet String[] containing the data to populate views to be used
      * by RecyclerView
      */
-    public CustomAdapter(String[] dataSet, int[] dataSetImages, String[] dataSetDesc) {
+    public CustomAdapter(String[] dataSet, int[] dataSetImages, String[] dataSetDesc, OnItemClickListener listener) {
 
         localDataSet = dataSet;
         localDataSetImages = dataSetImages;
         localDataSetDesc = dataSetDesc;
+        localListener = listener;
     }
 
     // Create new views (invoked by the layout manager)
@@ -81,6 +93,12 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         viewHolder.getTitle().setText(localDataSet[position]);
         viewHolder.getHeaderImage().setImageResource(localDataSetImages[position]);
         viewHolder.getDescription().setText(localDataSetDesc[position]);
+        viewHolder.getCardView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                localListener.onItemClick(localDataSet[position]);
+            }
+        });
     }
 
     // Return the size of your dataset (invoked by the layout manager)
