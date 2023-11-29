@@ -28,7 +28,7 @@ public class GalleryFragment extends Fragment {
         View root = binding.getRoot();
 
         final RecyclerView recyclerView = root.findViewById(R.id.recyclerView);
-        CustomAdapter customAdapter = new CustomAdapter(new String[]{"Jayson", "Tamayo"});
+        CustomAdapter customAdapter = new CustomAdapter(new String[]{"Ireland", "Iceland", "Greenland", "Poland", "Finland", "Netherlands"}, new int[]{R.drawable.scenery1,R.drawable.scenery2,R.drawable.scenery1,R.drawable.scenery1,R.drawable.scenery1,R.drawable.scenery1});
         recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
         recyclerView.setAdapter(customAdapter);
         return root;
