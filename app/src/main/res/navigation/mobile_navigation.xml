@@ -34,4 +34,20 @@
         android:name="com.jaysontamayo.drawer.ui.settings.SettingsFragment"
         android:label="Settings"
         tools:layout="@layout/fragment_settings" />
+
+    <fragment
+        android:id="@+id/nav_notes"
+        android:name="com.jaysontamayo.drawer.ui.notes.NotesFragment"
+        android:label="Notes"
+        tools:layout="@layout/fragment_notes" />
+    <fragment
+        android:id="@+id/nav_add_note"
+        android:name="com.jaysontamayo.drawer.ui.notes.AddNoteFragment"
+        android:label="Add Notes"
+        tools:layout="@layout/fragment_add_note" />
+    <fragment
+        android:id="@+id/nav_edit_note"
+        android:name="com.jaysontamayo.drawer.ui.notes.EditNoteFragment"
+        android:label="Edit Notes"
+        tools:layout="@layout/fragment_edit_note" />
 </navigation>

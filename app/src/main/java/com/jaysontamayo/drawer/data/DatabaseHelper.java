@@ -192,11 +192,70 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void addItem(String item1, String item2){
+    public List<NoteModel> getAllNotes(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        List<NoteModel> data = new ArrayList<>();
+
+        Cursor cursor;
+
+        try{
+            cursor = db.query("tblNotes", null, null, null, null, null,null);
+            while(cursor.moveToNext()){
+                NoteModel note = new NoteModel(cursor.getInt(0), cursor.getString(1),
+                        cursor.getString(2));
+                data.add(note);
+            }
+            Log.i("DatabaseHelper", "" + data);
+        }catch(Exception e){
+            Log.e("DatabaseHelper", "" + e.getLocalizedMessage());
+        }
+
+        return data;
+    }
+
+    public NoteModel getNote(int noteID){
+        SQLiteDatabase db = this.getWritableDatabase();
+        NoteModel note = null;
+
+        Cursor cursor;
+
+        try{
+            cursor = db.query("tblNotes", null, "noteID = ?", new String[]{"" + noteID}, null, null,null);
+            cursor.moveToFirst();
+            note = new NoteModel(cursor.getInt(0), cursor.getString(1),
+                        cursor.getString(2));
+            Log.i("DatabaseHelper", "" + note);
+        }catch(Exception e){
+            Log.e("DatabaseHelper", "" + e.getLocalizedMessage());
+        }
+        return note;
+    }
+
+    public int updateNote(int noteID, String title, String desc){
+        int result = -1;
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put("username", item1);
-        cv.put("password", item2);
-        db.insert("tblAccount", null, cv);
+        cv.put("title", title);
+        cv.put("description", desc);
+        try {
+            result = db.update("tblNotes", cv, "noteID = ?", new String[]{"" + noteID});
+        }catch (Exception e){
+            Log.e("DatabaseHelper", "" + e.getLocalizedMessage());
+        }
+        return result;
+    }
+    public long addNote(String title, String desc){
+        long result = -1;
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("title", title);
+        cv.put("description", desc);
+        result = db.insert("tblNotes", null, cv);
+        return result;
+    }
+    public void deleteNote(int noteID){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        db.delete("tblNotes", "noteID = ?", new String[]{"" + noteID});
     }
 }
