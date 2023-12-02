@@ -24,7 +24,7 @@ import java.util.List;
 public class GalleryFragment extends Fragment {
 
     private FragmentGalleryBinding binding;
-
+    private CustomAdapter customAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -37,7 +37,7 @@ public class GalleryFragment extends Fragment {
         final RecyclerView recyclerView = root.findViewById(R.id.recyclerView);
         DatabaseHelper db = new DatabaseHelper(root.getContext());
         List<CountryModel> data = db.getAllCountries();
-        CustomAdapter customAdapter = new CustomAdapter(
+        customAdapter = new CustomAdapter(
                 data,
                 new CustomAdapter.OnItemClickListener() {
                     @Override
@@ -47,9 +47,11 @@ public class GalleryFragment extends Fragment {
                 },
                 new CustomAdapter.OnFaveClickListener() {
                     @Override
-                    public void onItemClick(CountryModel item) {
+                    public void onItemClick(CountryModel item, int position) {
                         db.updateFavorite(item.countryID, item.favorite == 0 ? 1 : 0);
-                        Snackbar.make(root, item.country + " has been added to your Favorites.", Snackbar.LENGTH_LONG).show();
+                        data.set(position, new CountryModel(item.countryID, item.country,item.description, item.capital, item.population, item.image, item.favorite == 0 ? 1 : 0));
+                        customAdapter.notifyDataSetChanged();
+                        Snackbar.make(root, item.country + " has been " + (item.favorite == 0 ? "added" : "removed") + " to your Favorites.", Snackbar.LENGTH_LONG).show();
                     }
                 },
                 root.getContext());

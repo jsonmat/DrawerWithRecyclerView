@@ -33,7 +33,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     }
 
     public interface OnFaveClickListener {
-        void onItemClick(CountryModel item);
+        void onItemClick(CountryModel item, int position);
     }
 
 
@@ -119,7 +119,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         viewHolder.getBtnFave().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                localListenerFave.onItemClick(localDataSet.get(position));
+                localListenerFave.onItemClick(localDataSet.get(position), position);
             }
         });
         if(localDataSet.get(position).favorite == 0){
