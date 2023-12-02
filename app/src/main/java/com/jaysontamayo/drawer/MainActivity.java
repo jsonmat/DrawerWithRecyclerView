@@ -1,6 +1,7 @@
 package com.jaysontamayo.drawer;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
@@ -18,6 +19,7 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.jaysontamayo.drawer.data.DatabaseHelper;
 import com.jaysontamayo.drawer.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -33,6 +35,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.appBarMain.toolbar);
+
+        DatabaseHelper db = new DatabaseHelper(MainActivity.this);
+
+        try{
+            db.createDataBase();
+        }catch(Exception e){
+            Log.e("MainActivity", "" + e.getLocalizedMessage());
+        }
+
+        db.addItem("admin", "admin");
 
         binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
             @Override

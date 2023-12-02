@@ -1,10 +1,14 @@
 package com.jaysontamayo.drawer.ui.gallery;
 
 
+import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,18 +16,26 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jaysontamayo.drawer.R;
+import com.jaysontamayo.drawer.data.CountryModel;
+
+import java.util.List;
 
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
 
-    private String[] localDataSet;
-    private int[] localDataSetImages;
-    private String[] localDataSetDesc;
+    private List<CountryModel> localDataSet;
     private final OnItemClickListener localListener;
+    private final OnFaveClickListener localListenerFave;
+    private Context context;
 
     public interface OnItemClickListener {
-        void onItemClick(String item);
+        void onItemClick(CountryModel item);
     }
+
+    public interface OnFaveClickListener {
+        void onItemClick(CountryModel item);
+    }
+
 
     /**
      * Provide a reference to the type of views that you are using
@@ -34,6 +46,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         private final TextView description;
         private final ImageView header_image;
         private final CardView cardView;
+        private final Button btnFave;
 
         public ViewHolder(View view) {
             super(view);
@@ -43,6 +56,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             description = view.findViewById(R.id.description);
             header_image = view.findViewById(R.id.header_image);
             cardView = view.findViewById(R.id.cardView);
+            btnFave = view.findViewById(R.id.btnFave);
         }
 
         public TextView getTitle() {
@@ -57,6 +71,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         public CardView getCardView() {
             return cardView;
         }
+        public Button getBtnFave() {
+            return btnFave;
+        }
     }
 
     /**
@@ -65,12 +82,12 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
      * @param dataSet String[] containing the data to populate views to be used
      * by RecyclerView
      */
-    public CustomAdapter(String[] dataSet, int[] dataSetImages, String[] dataSetDesc, OnItemClickListener listener) {
+    public CustomAdapter(List<CountryModel> dataSet, OnItemClickListener listener, OnFaveClickListener listenerFave, Context context) {
 
         localDataSet = dataSet;
-        localDataSetImages = dataSetImages;
-        localDataSetDesc = dataSetDesc;
         localListener = listener;
+        localListenerFave = listenerFave;
+        this.context = context;
     }
 
     // Create new views (invoked by the layout manager)
@@ -89,22 +106,33 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        Log.i("", "" + localDataSet[position]);
-        viewHolder.getTitle().setText(localDataSet[position]);
-        viewHolder.getHeaderImage().setImageResource(localDataSetImages[position]);
-        viewHolder.getDescription().setText(localDataSetDesc[position]);
+        viewHolder.getTitle().setText(localDataSet.get(position).country);
+        int img = context.getResources().getIdentifier(localDataSet.get(position).image, "drawable", "com.jaysontamayo.drawer");
+        viewHolder.getHeaderImage().setImageResource(img);
+        viewHolder.getDescription().setText(localDataSet.get(position).description);
         viewHolder.getCardView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                localListener.onItemClick(localDataSet[position]);
+                localListener.onItemClick(localDataSet.get(position));
             }
         });
+        viewHolder.getBtnFave().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                localListenerFave.onItemClick(localDataSet.get(position));
+            }
+        });
+        if(localDataSet.get(position).favorite == 0){
+            viewHolder.getBtnFave().setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
+        }else{
+            viewHolder.getBtnFave().setBackgroundTintList(ColorStateList.valueOf(Color.RED));
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return localDataSet.length;
+        return localDataSet.size();
     }
 }
 
