@@ -45,14 +45,26 @@
                     android:layout_weight="1"
                     android:text="Ireland" />
 
-                <Button
-                    android:id="@+id/btnFave"
-                    style="@style/Widget.AppCompat.Button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:background="@drawable/baseline_favorite_24" />
+                <FrameLayout
+                    android:layout_width="100dp"
+                    android:layout_height="100dp">
+
+                    <Button
+                        android:id="@+id/btnFave"
+                        style="@style/Widget.AppCompat.Button"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/baseline_favorite_24" />
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/animationView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:lottie_rawRes="@raw/heart"
+                        app:lottie_autoPlay="false"
+                        app:lottie_loop="false"/>
+                </FrameLayout>
 
             </LinearLayout>
 

@@ -19,6 +19,8 @@ import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
 
+import com.jaysontamayo.drawer.ui.sample.NameModel;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     //The Android's default system path of your application database.
@@ -179,6 +181,51 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         return data;
+    }
+
+    public List<NameModel> getAllNames(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        List<NameModel> data = new ArrayList<>();
+
+        Cursor cursor;
+
+        try{
+            cursor = db.query("tblNames", null,null,null,null, null,null);
+
+            while(cursor.moveToNext()){
+                NameModel name = new NameModel(cursor.getInt(0), cursor.getString(1), cursor.getString(2));
+                data.add(name);
+            }
+
+        }catch (Exception e){
+            Log.e("DatabaseHelper", "" + e.getLocalizedMessage());
+        }
+
+        return data;
+    }
+
+    public List<NameModel> getNames(String searchText){
+        SQLiteDatabase db = this.getWritableDatabase();
+        List<NameModel> data = new ArrayList<>();
+
+        Cursor cursor;
+
+        try{
+            cursor = db.query("tblNames", null,"lastName LIKE ? OR firstName LIKE ?",new String[]{"%"+ searchText + "%", "%"+ searchText + "%"},null, null,null);
+
+            while(cursor.moveToNext()){
+                NameModel name = new NameModel(cursor.getInt(0), cursor.getString(1), cursor.getString(2));
+                data.add(name);
+            }
+
+            Log.i("DatabaseHelper", "" + data);
+
+        }catch (Exception e){
+            Log.e("DatabaseHelper", "" + e.getLocalizedMessage());
+        }
+
+        return data;
+
     }
 
     public void updateFavorite(int countryID, int value){

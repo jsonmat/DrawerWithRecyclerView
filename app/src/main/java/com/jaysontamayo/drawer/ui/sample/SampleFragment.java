@@ -3,6 +3,8 @@ package com.jaysontamayo.drawer.ui.sample;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.jaysontamayo.drawer.R;
+import com.jaysontamayo.drawer.data.DatabaseHelper;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -62,8 +65,14 @@ public class SampleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
        View root = inflater.inflate(R.layout.fragment_sample, container, false);
-       TextView tvResult = root.findViewById(R.id.tvResult);
-       tvResult.setText("Hi");
+
+        DatabaseHelper db = new DatabaseHelper(root.getContext());
+        RecyclerView rvSample = root.findViewById(R.id.rvSample);
+        SampleCustomAdapter adapter = new SampleCustomAdapter(db.getAllNames());
+        rvSample.setAdapter(adapter);
+        rvSample.setLayoutManager(new LinearLayoutManager(root.getContext()));
+
+        db.getNames("be");
         return root;
     }
 }

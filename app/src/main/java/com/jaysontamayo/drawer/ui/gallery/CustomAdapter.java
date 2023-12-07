@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.jaysontamayo.drawer.R;
 import com.jaysontamayo.drawer.data.CountryModel;
 
@@ -47,6 +48,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         private final ImageView header_image;
         private final CardView cardView;
         private final Button btnFave;
+        private final LottieAnimationView animationView;
 
         public ViewHolder(View view) {
             super(view);
@@ -57,6 +59,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             header_image = view.findViewById(R.id.header_image);
             cardView = view.findViewById(R.id.cardView);
             btnFave = view.findViewById(R.id.btnFave);
+            animationView = view.findViewById(R.id.animationView);
         }
 
         public TextView getTitle() {
@@ -74,6 +77,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         public Button getBtnFave() {
             return btnFave;
         }
+        public LottieAnimationView getAnimationView(){return animationView;}
     }
 
     /**
@@ -119,6 +123,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         viewHolder.getBtnFave().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(localDataSet.get(position).favorite == 0){
+                    viewHolder.getAnimationView().playAnimation();
+                }
                 localListenerFave.onItemClick(localDataSet.get(position), position);
             }
         });
