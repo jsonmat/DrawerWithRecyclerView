@@ -72,7 +72,6 @@ public class SampleFragment extends Fragment {
         rvSample.setAdapter(adapter);
         rvSample.setLayoutManager(new LinearLayoutManager(root.getContext()));
 
-        db.getNames("be");
         return root;
     }
 }

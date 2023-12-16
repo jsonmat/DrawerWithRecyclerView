@@ -113,6 +113,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         viewHolder.getTitle().setText(localDataSet.get(position).country);
         int img = context.getResources().getIdentifier(localDataSet.get(position).image, "drawable", "com.jaysontamayo.drawer");
         viewHolder.getHeaderImage().setImageResource(img);
+        viewHolder.getHeaderImage().setImageResource(R.drawable.ireland);
         viewHolder.getDescription().setText(localDataSet.get(position).description);
         viewHolder.getCardView().setOnClickListener(new View.OnClickListener() {
             @Override

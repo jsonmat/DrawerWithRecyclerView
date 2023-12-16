@@ -11,9 +11,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.service.controls.actions.FloatAction;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -41,6 +44,8 @@ public class NotesFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    List<NoteModel> data; //nilabas natin to para ma-access ng inner methods
 
     public NotesFragment() {
         // Required empty public constructor
@@ -79,7 +84,7 @@ public class NotesFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_notes, container, false);
         final RecyclerView recyclerView = root.findViewById(R.id.rvNotes);
         DatabaseHelper db = new DatabaseHelper(root.getContext());
-        List<NoteModel> data = db.getAllNotes();
+        data = db.getAllNotes();
         notesAdapter = new NotesAdapter(
                 data,
                 new NotesAdapter.OnItemClickListener() {
@@ -111,6 +116,42 @@ public class NotesFragment extends Fragment {
             }
         });
 
+        //SEARCH
+        EditText searchBar = root.findViewById(R.id.searchBar);
+        searchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                //WAG DITO
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                //WAG RIN DTO
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //PAG NAGBAGO UNG TEXT SA SEARCH BAR, ITO UNG MA-TRIGGER
+                //CHECK MUNA NATIN KUNG WALANG LAMAN UNG STRING NA NASA SEARCH BAR
+                if(s.length() == 0){
+                    //PAG WALANG LAMAN, KUNIN NATIN LAHAT NG RECORDS
+                    data.clear(); //clear muna ntn ang laman kasi pag hindi na-clear, dadagdag lang ung nasa baba
+                    data.addAll(db.getAllNotes()); //i-add natin ung naretrieve ntn mula sa database
+                    notesAdapter.notifyDataSetChanged(); //notify natin ung adapter natin na nagbago ung data na gingamit nya para magreload sya
+                }else{
+                    //PAG MAY LAMAN, ITO ANG GAGAWIN NATIN
+                    //KUNIN KO UNG TEXT SA SEARCH BAR
+                    String input = s.toString();
+
+                    data.clear(); //clear muna ntn ang laman kasi pag hindi na-clear, dadagdag lang ung nasa baba
+                    data.addAll(db.getNotesWithMatches(input)); //TAWAGIN KO UNG METHOD NG DATABASEHELPER NA PANG RETRIEVE NG RECORDS NA MAY WHERE CLAUSE. I-ADD SYA SA DATA NA LIST
+                    notesAdapter.notifyDataSetChanged(); //notify natin ung adapter natin na nagbago ung data na gingamit nya para magreload sya
+
+                }
+            }
+
+
+        });
 
 
         return root;

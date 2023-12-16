@@ -204,30 +204,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return data;
     }
 
-    public List<NameModel> getNames(String searchText){
-        SQLiteDatabase db = this.getWritableDatabase();
-        List<NameModel> data = new ArrayList<>();
-
-        Cursor cursor;
-
-        try{
-            cursor = db.query("tblNames", null,"lastName LIKE ? OR firstName LIKE ?",new String[]{"%"+ searchText + "%", "%"+ searchText + "%"},null, null,null);
-
-            while(cursor.moveToNext()){
-                NameModel name = new NameModel(cursor.getInt(0), cursor.getString(1), cursor.getString(2));
-                data.add(name);
-            }
-
-            Log.i("DatabaseHelper", "" + data);
-
-        }catch (Exception e){
-            Log.e("DatabaseHelper", "" + e.getLocalizedMessage());
-        }
-
-        return data;
-
-    }
-
     public void updateFavorite(int countryID, int value){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -258,6 +234,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         return data;
+    }
+
+    //GET NOTES PERO ITO MAY WHERE CLAUSE
+    //KAYA UNG MAGMA-MATCH LANG SA CONDITION NATIN ANG IRETURN NYA
+    public List<NoteModel> getNotesWithMatches(String searchText){
+        SQLiteDatabase db = this.getWritableDatabase();
+        List<NoteModel> data = new ArrayList<>();
+
+        Cursor cursor;
+
+        try{
+            //DITO SA QUERY, TINATRY NATIN I-RETRIEVE UNG NOTES NA UNG title AT description NILA NAGLALAMAN NUNG searchText
+            cursor = db.query("tblNotes", null,"title LIKE ? OR description LIKE ?",new String[]{"%"+ searchText + "%", "%"+ searchText + "%"},null, null,null);
+
+            while(cursor.moveToNext()){
+                NoteModel note = new NoteModel(cursor.getInt(0), cursor.getString(1),
+                        cursor.getString(2));
+                data.add(note);
+            }
+
+            Log.i("DatabaseHelper", "" + data);
+
+        }catch (Exception e){
+            Log.e("DatabaseHelper", "" + e.getLocalizedMessage());
+        }
+
+        return data;
+
     }
 
     public NoteModel getNote(int noteID){
